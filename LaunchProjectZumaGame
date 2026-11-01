@@ -1,0 +1,14 @@
+package proyecto;
+
+import edu.upb.lp.game.core.GameController;
+import edu.upb.lp.game.core.MainLibrary;
+import edu.upb.lp.game.internal.MainSwingLibrary;
+
+public class LaunchProjectZumaGame {
+
+	public static void main(String[] args) {
+		GameController controller = new ProjectZumaGameController();
+		MainLibrary m = new MainSwingLibrary();
+		m.run(controller);
+	}
+}
