@@ -1,59 +1,70 @@
-package proyecto;
+package projectZumaGame;
+
+import java.util.Random;
 
 public abstract class Marisco {
 
 	private String imagen;
-	private int filas;
-	private int columnas;
-	//atributo color?
-	
-	public Marisco(String imagen, int filas, int columnas) {
+	private int fila;
+	private int columna;
+	private String color;
+	private String[] colores = {"rojo", "azul", "amarillo", "verde"};
+	private ZumaGame game;
+	private Random rnd = new Random();
+
+	public Marisco(String imagen, int filas, int columnas, ZumaGame game) {
 		this.imagen = imagen;
-		this.filas = filas;
-		this.columnas = columnas;
+		this.fila = filas;
+		this.columna = columnas;
+		this.game = game;
+		color = colores[rnd.nextInt()];
 	}
-	
+
 	public int getFilas() {
-		return filas;
+		return fila;
 	}
-	
+
 	public int getColumnas() {
-		return columnas;
+		return columna;
 	}
-	
+
 	public String getImagen() {
 		return imagen;
 	}
-	
+
 	public void mover(int[][] mat) {
-		int dir = mat[filas][columnas];   // leer ANTES de cambiar nada
-	    if (dir == 1) {
-	        columnas++;        // derecha
-	    } else if (dir == 2) {
-	        filas++;           // abajo
-	    } else if (dir == 3) {
-	        columnas--;        // izquierda
-	    } else if (dir == 4) {
-	        filas--;           // arriba
-	    }
+		game.borrarMarisco(fila, columna);
+		int dir = mat[fila][columna]; // leer ANTES de cambiar nada
+		if (dir == 1) {
+			columna++; // derecha
+		} else if (dir == 2) {
+			fila++; // abajo
+		} else if (dir == 3) {
+			columna--; // izquierda
+		} else if (dir == 4) {
+			fila--; // arriba
+		}
+		game.dibujarMarisco(fila,columna, imagen+"_"+color); 
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof Marisco p){
+		if (o instanceof Marisco p) {
 			return p.getImagen().equals(imagen);
 		} else {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return imagen.hashCode();
 	}
 
 	public abstract void Impactar();
-	
-	//falta comparar que esten en la misma fila y columna  para que colisionen y borren
+
+	// falta comparar que esten en la misma fila y columna para que colisionen y
+	// borren
 
 }
+
