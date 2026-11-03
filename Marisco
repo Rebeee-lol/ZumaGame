@@ -1,0 +1,59 @@
+package proyecto;
+
+public abstract class Marisco {
+
+	private String imagen;
+	private int filas;
+	private int columnas;
+	//atributo color?
+	
+	public Marisco(String imagen, int filas, int columnas) {
+		this.imagen = imagen;
+		this.filas = filas;
+		this.columnas = columnas;
+	}
+	
+	public int getFilas() {
+		return filas;
+	}
+	
+	public int getColumnas() {
+		return columnas;
+	}
+	
+	public String getImagen() {
+		return imagen;
+	}
+	
+	public void mover(int[][] mat) {
+		int dir = mat[filas][columnas];   // leer ANTES de cambiar nada
+	    if (dir == 1) {
+	        columnas++;        // derecha
+	    } else if (dir == 2) {
+	        filas++;           // abajo
+	    } else if (dir == 3) {
+	        columnas--;        // izquierda
+	    } else if (dir == 4) {
+	        filas--;           // arriba
+	    }
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Marisco p){
+			return p.getImagen().equals(imagen);
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return imagen.hashCode();
+	}
+
+	public abstract void Impactar();
+	
+	//falta comparar que esten en la misma fila y columna  para que colisionen y borren
+
+}
