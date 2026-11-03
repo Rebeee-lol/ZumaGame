@@ -1,54 +1,92 @@
 package projectZumaGame;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Stack;
 
 public class ZumaGame {
-	
+
 	private ZumaController controller;
+	private Marisco marisco;
 	private Pinguino pinguino = new Pinguino();
-	private Pescado pescado;
-	private Queue<Pescado> cargadorPescados = new LinkedList<>();
-	private Stack<Pescado> pilaRetroceso = new Stack<>();
-	private int [][] mat = {
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0},
-			{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 2, 0},
-			{0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0},
-			{0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0},
-			{0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0},
-			{0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0},
-			{0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0},
-			{0, 4, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 2, 0},
-			{0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0},
-			{0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0},
-			{0, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	};
+	private Marisco[][] caminoMariscos = new Marisco[15][21];
+	private Queue<Marisco> cargadorMariscos = new LinkedList<>(); //Al pinguino
+//	private Stack<Marisco> pilaRetroceso = new Stack<>();
+	private List<Marisco> mariscosEnPantalla = new LinkedList<>();
+	private Random rnd = new Random();
+	private int pecesPorGenerar = 30;
+	private String idDelMovedor;
+	private MovedorDeMariscos movedor = new MovedorDeMariscos(this);
 	
+	private int[][] mat = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0 },
+			{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 2, 0 },
+			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0 },
+			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0 },
+			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0 },
+			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0 },
+			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0 },
+			{ 0, 4, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 2, 0 },
+			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0 },
+			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0 },
+			{ 0, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, };
+
 	public ZumaGame(ZumaController controller) {
-        this.controller = controller;
-    }
-	
+		this.controller = controller;
+	}
+
 	public void iniciarJuego() {
-		redibujarPinguino();
+		idDelMovedor = controller.executeRepeatedly(movedor, 1000);
 	}
 	
+	public void detenerMovedor() {
+		controller.stopLoop(idDelMovedor);
+	}
+
 	public void moverPinguino(String direccion) {
 		this.pinguino.setDireccion(direccion);
 		redibujarPinguino();
 	}
-	
+
 	private void redibujarPinguino() {
-        int f = this.pinguino.getFila();
-        int c = this.pinguino.getCol();
-        String imagen = this.pinguino.getCambioDeImagen();
-        this.controller.dibujarEnCelda(f, c, imagen);
+		int f = pinguino.getFila();
+		int c = pinguino.getCol();
+		String imagen = this.pinguino.getCambioDeImagen();
+		this.controller.dibujarEnCelda(f, c, imagen);
+	}
+	
+	public int[][] getMapaMatriz() {
+        return mat;
+    }
+
+	public void avanzarMariscos() {
+		//Dice a todos los mariscos, uno por uno, que avancen
+		for (Marisco m : mariscosEnPantalla) {
+			m.mover(mat);
+		}
+		//Saca un nuevo pez estandar
+		PezEstandar nuevo = new PezEstandar(1,0, this);
+		controller.dibujarEnCelda(1, 0, idDelMovedor);
+		mariscosEnPantalla.add(nuevo);
 	}
 
+	public void borrarMarisco(int fila, int columna) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void dibujarMarisco(int fila, int columna, String string) {
+		controller.dibujarEnCelda(fila, columna, marisco.getImagen());
+		
+	}
 	
+//	public void start() {
+//		idDelMovedor = controller.time.executeRepeadtedly()
+//	}
 
 }
