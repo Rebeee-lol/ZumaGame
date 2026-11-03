@@ -1,1 +1,13 @@
+package projectZumaGame;
 
+public class PezEstandar extends Marisco{
+
+	public PezEstandar(int filas, int columnas, ZumaGame game) {
+		super("pez", filas, columnas, game);
+	}
+
+	@Override
+	public void Impactar() {
+	}
+
+}
