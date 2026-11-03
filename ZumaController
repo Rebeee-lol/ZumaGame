@@ -3,11 +3,13 @@ package projectZumaGame;
 import edu.upb.lp.game.core.GameController;
 import edu.upb.lp.game.core.GraphicsLibrary;
 import edu.upb.lp.game.core.MainLibrary;
+import edu.upb.lp.game.core.TimeLibrary;
 
 public class ZumaController implements GameController {
-	
+
 	private MainLibrary library;
 	private GraphicsLibrary graphics;
+	private TimeLibrary time;
 	private ZumaGame game;
 	private boolean gameEnded = false;
 
@@ -43,28 +45,46 @@ public class ZumaController implements GameController {
 
 	@Override
 	public void initialiseInterface() {
-		graphics.configureGrid(15,21, 840, 600, true);
+		graphics.configureGrid(15, 21, 840, 600, false);
 		for (int f = 0; f < 15; f++) {
-            for (int c = 0; c < 21; c++) {
-                graphics.setCellBackgroundImage(f, c, "fondo_" + f + "_" + c);
-            }
-        }
+			for (int c = 0; c < 21; c++) {
+				graphics.setCellBackgroundImage(f, c, "fondo_" + f + "_" + c);
+			}
+		}
+		graphics.setCellObjectImage(7, 10, "pinguino_abajo");
 		game = new ZumaGame(this);
 		game.iniciarJuego();
-
 	}
 
 	@Override
 	public void setLibrary(MainLibrary library) {
 		this.library = library;
 		this.graphics = library.getGraphics();
-
+		this.time = library.getTime();
 	}
+	
 	
 	public void dibujarEnCelda(int fila, int col, String nombreImagen) {
 		graphics.setCellObjectImage(fila, col, nombreImagen);
 	}
+
+	public void limpiarCelda(int fila, int col) {
+		graphics.clearCellObjectImage(fila, col);
+	}
+
+	public String executeRepeatedly(Runnable r, int ms) {
+		return time.executeRepeatedly(r, ms);
+		
+	}
+
+	public void stopLoop(String id) {
+		time.stopLoop(id);
+	}
 	
+//	public String executeRepead
+
+}
+
 	public void limpiarCelda(int fila, int col) {
 		graphics.clearCellObjectImage(fila, col);
 	}
