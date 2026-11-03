@@ -1,54 +1,72 @@
-package proyecto;
+package projectZumaGame;
 
 import edu.upb.lp.game.core.GameController;
 import edu.upb.lp.game.core.GraphicsLibrary;
 import edu.upb.lp.game.core.MainLibrary;
 
-public class ProjectZumaGameController implements GameController {
-
+public class ZumaController implements GameController {
+	
 	private MainLibrary library;
 	private GraphicsLibrary graphics;
-	
+	private ZumaGame game;
+	private boolean gameEnded = false;
+
 	@Override
 	public void onButtonPressed(String name) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onCellPressed(int row, int col) {
 		// TODO Auto-generated method stub
-		
-		
+
 	}
 
 	@Override
 	public void onKeyPressed(String key) {
-		// TODO Auto-generated method stub
-		
+		if (key == null || gameEnded) {
+			return;
+		}
+		String k = key.toLowerCase();
+		if (k.equals("w") || key.equals("UP")) {
+			game.moverPinguino("ARRIBA");
+		} else if (k.equals("s") || key.equals("DOWN")) {
+			game.moverPinguino("ABAJO");
+		} else if (k.equals("a") || key.equals("LEFT")) {
+			game.moverPinguino("IZQUIERDA");
+		} else if (k.equals("d") || key.equals("RIGHT")) {
+			game.moverPinguino("DERECHA");
+		}
+
 	}
 
 	@Override
-	public void initialiseInterface() { //saber que libreria utiliza que, son varias
-		graphics.configureGrid(15, 21, 840, 600, true);
-		for (int f=0; f< 15 ;f++) {
-			for (int c= 0; c< 21 ;c++) {
-				graphics.setCellBackgroundImage(f, c, "fondo_" + f + "_"+ c);
-			}
-		}
-		for (int f=1;f<4; f++) {
-			for(int c=1; c<4;c++) {
-				graphics.setCellObjectImage(5+f,8+c, "fila-" + f + "-columna-" + c);
-			}
-		}
+	public void initialiseInterface() {
+		graphics.configureGrid(15,21, 840, 600, true);
+		for (int f = 0; f < 15; f++) {
+            for (int c = 0; c < 21; c++) {
+                graphics.setCellBackgroundImage(f, c, "fondo_" + f + "_" + c);
+            }
+        }
+		game = new ZumaGame(this);
+		game.iniciarJuego();
+
 	}
 
 	@Override
 	public void setLibrary(MainLibrary library) {
-		this.library=library;
-		this.graphics=library.getGraphics();
-		
+		this.library = library;
+		this.graphics = library.getGraphics();
+
+	}
+	
+	public void dibujarEnCelda(int fila, int col, String nombreImagen) {
+		graphics.setCellObjectImage(fila, col, nombreImagen);
+	}
+	
+	public void limpiarCelda(int fila, int col) {
+		graphics.clearCellObjectImage(fila, col);
 	}
 
-	
 }
