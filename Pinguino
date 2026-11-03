@@ -1,40 +1,39 @@
 package projectZumaGame;
 
 public class Pinguino {
-	
+
 	private int fila = 7;
 	private int col = 10;
-    private String direccion = "ARRIBA";
-    
-    public void setDireccion(String nuevaDireccion) {
-        this.direccion = nuevaDireccion;
-    }
-    
-    public String getDireccion() {
-        return this.direccion;
-    }
-    
-    public String getCambioDeImagen() {
-        if (this.direccion.equals("ARRIBA")) {
-            return "pinguino_arriba";
-        } else if (this.direccion.equals("ABAJO")) {
-            return "pinguino_abajo";
-        } else if (this.direccion.equals("IZQUIERDA")) {
-            return "pinguino_izq";
-        } else if (this.direccion.equals("DERECHA")) {
-            return "pinguino_der";
-        } else {
-            return "pinguino_arriba";
-        }
-    }
-    
-    public int getFila() {
-        return this.fila;
-    }
+	private String direccion = "ARRIBA";
 
-    public int getCol() {
-        return this.col;
-    }
+	public void setDireccion(String nuevaDireccion) {
+		this.direccion = nuevaDireccion;
+	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+
+	public String getCambioDeImagen() {
+		if (this.direccion.equals("ARRIBA")) {
+			return "pinguino_arriba";
+		} else if (this.direccion.equals("ABAJO")) {
+			return "pinguino_abajo";
+		} else if (this.direccion.equals("IZQUIERDA")) {
+			return "pinguino_izq";
+		} else if (this.direccion.equals("DERECHA")) {
+			return "pinguino_der";
+		} else {
+			return "pinguino_arriba";
+		}
+	}
+
+	public int getFila() {
+		return fila;
+	}
+
+	public int getCol() {
+		return col;
+	}
 
 }
-
