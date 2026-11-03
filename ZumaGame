@@ -8,7 +8,7 @@ import java.util.Stack;
 
 public class ZumaGame {
 
-	private ZumaController controller;
+	private ZumaController controller;		
 	private Marisco marisco;
 	private Pinguino pinguino = new Pinguino();
 	private Marisco[][] caminoMariscos = new Marisco[15][21];
@@ -70,18 +70,25 @@ public class ZumaGame {
 			m.mover(mat);
 		}
 		//Saca un nuevo pez estandar
-		PezEstandar nuevo = new PezEstandar(1,0, this);
-		controller.dibujarEnCelda(1, 0, idDelMovedor);
-		mariscosEnPantalla.add(nuevo);
+		if (pecesPorGenerar > 0 && caminoMariscos[1][0] == null) {
+			PezEstandar nuevo = new PezEstandar(1,0, this);
+			mariscosEnPantalla.add(nuevo);
+			caminoMariscos[1][0] = nuevo;
+			controller.dibujarEnCelda(1, 0, nuevo.getImagen());
+			pecesPorGenerar--;
+		}
+		redibujarPinguino();
 	}
 
 	public void borrarMarisco(int fila, int columna) {
-		// TODO Auto-generated method stub
+		caminoMariscos[fila][columna] = null;
+		controller.limpiarCelda(fila, columna);	
 		
 	}
 
-	public void dibujarMarisco(int fila, int columna, String string) {
-		controller.dibujarEnCelda(fila, columna, marisco.getImagen());
+	public void dibujarMarisco(int fila, int columna, String nombreImagen, Marisco m) {
+		caminoMariscos[fila][columna] = m;
+		controller.dibujarEnCelda(fila, columna, nombreImagen);
 		
 	}
 	
@@ -90,3 +97,4 @@ public class ZumaGame {
 //	}
 
 }
+
