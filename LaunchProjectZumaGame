@@ -1,14 +1,38 @@
-package proyecto;
+package projectZumaGame;
 
-import edu.upb.lp.game.core.GameController;
-import edu.upb.lp.game.core.MainLibrary;
-import edu.upb.lp.game.internal.MainSwingLibrary;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
 
-public class LaunchProjectZumaGame {
-
-	public static void main(String[] args) {
-		GameController controller = new ProjectZumaGameController();
-		MainLibrary m = new MainSwingLibrary();
-		m.run(controller);
+public class ZumaGame {
+	
+	private ZumaController controller;
+	private Pinguino pinguino = new Pinguino();
+	private Pescado pescado;
+	private Queue<Pescado> cargadorPescados = new LinkedList<>();
+	private Stack<Pescado> pilaRetroceso = new Stack<>();
+	private int[][] mapaMatriz;
+	
+	public ZumaGame(ZumaController controller) {
+        this.controller = controller;
+    }
+	
+	public void iniciarJuego() {
+		redibujarPinguino();
 	}
+	
+	public void moverPinguino(String direccion) {
+		this.pinguino.setDireccion(direccion);
+		redibujarPinguino();
+	}
+	
+	private void redibujarPinguino() {
+        int f = this.pinguino.getFila();
+        int c = this.pinguino.getCol();
+        String imagen = this.pinguino.getCambioDeImagen();
+        this.controller.dibujarEnCelda(f, c, imagen);
+	}
+
+	
+
 }
