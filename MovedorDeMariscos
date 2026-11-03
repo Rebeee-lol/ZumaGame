@@ -1,1 +1,17 @@
+package projectZumaGame;
+
+public class MovedorDeMariscos implements Runnable {
+	
+	private ZumaGame game;
+	
+	public MovedorDeMariscos (ZumaGame game) {
+		this.game=game;
+	}
+
+	@Override
+	public void run() {
+		game.avanzarMariscos();
+	}
+
+}
 
