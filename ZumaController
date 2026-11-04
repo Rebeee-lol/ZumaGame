@@ -51,7 +51,7 @@ public class ZumaController implements GameController {
 				graphics.setCellBackgroundImage(f, c, "fondo_" + f + "_" + c);
 			}
 		}
-		graphics.setCellObjectImage(7, 10, "pinguino_abajo");
+		graphics.setCellObjectImage(7, 10, "pinguino_arriba");
 		game = new ZumaGame(this);
 		game.iniciarJuego();
 	}
@@ -82,11 +82,5 @@ public class ZumaController implements GameController {
 	}
 	
 //	public String executeRepead
-
-}
-
-	public void limpiarCelda(int fila, int col) {
-		graphics.clearCellObjectImage(fila, col);
-	}
 
 }
