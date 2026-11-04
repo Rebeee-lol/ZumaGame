@@ -5,10 +5,6 @@ public class Calamar extends Marisco {
 	public Calamar(int filas, int columnas, ZumaGame game) {
 		super("calamar", filas, columnas, game);
 	}
-	
-	public Calamar(int filas, int columnas, ZumaGame game, String color) {
-		super("calamar", filas, columnas, game, color);
-	}
 
 	@Override
 	public void impactar() {
