@@ -12,12 +12,20 @@ public abstract class Marisco {
 	private ZumaGame game;
 	private Random rnd = new Random();
 
+	public Marisco(String imagen, int filas, int columnas, ZumaGame game, String color) {
+		this.imagen = imagen;
+		this.fila = filas;
+		this.columna = columnas;
+		this.game = game;
+		this.color= color; 
+	}
+	
 	public Marisco(String imagen, int filas, int columnas, ZumaGame game) {
 		this.imagen = imagen;
 		this.fila = filas;
 		this.columna = columnas;
 		this.game = game;
-		color = colores[rnd.nextInt()];
+		this.color= colores[rnd.nextInt(colores.length)];
 	}
 
 	public int getFilas() {
@@ -29,7 +37,7 @@ public abstract class Marisco {
 	}
 
 	public String getImagen() {
-		return imagen;
+		return imagen + "_" + color;
 	}
 
 	public void mover(int[][] mat) {
@@ -44,7 +52,7 @@ public abstract class Marisco {
 		} else if (dir == 4) {
 			fila--; // arriba
 		}
-		game.dibujarMarisco(fila,columna, imagen+"_"+color); 
+		game.dibujarMarisco(fila,columna, getImagen(), this); 
 	}
 
 	@Override
@@ -61,10 +69,9 @@ public abstract class Marisco {
 		return imagen.hashCode();
 	}
 
-	public abstract void Impactar();
+	public abstract void impactar();
 
 	// falta comparar que esten en la misma fila y columna para que colisionen y
 	// borren
 
 }
-
