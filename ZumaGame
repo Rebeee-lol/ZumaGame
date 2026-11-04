@@ -10,13 +10,13 @@ public class ZumaGame {
 
 	private ZumaController controller;		
 	private Marisco marisco;
-	private Pinguino pinguino = new Pinguino();
+	private Pinguino pinguino = new Pinguino(this);
 	private Marisco[][] caminoMariscos = new Marisco[15][21];
 	private Queue<Marisco> cargadorMariscos = new LinkedList<>(); //Al pinguino
 //	private Stack<Marisco> pilaRetroceso = new Stack<>();
 	private List<Marisco> mariscosEnPantalla = new LinkedList<>();
 	private Random rnd = new Random();
-	private int pecesPorGenerar = 30;
+	private int pecesPorGenerar = 300;
 	private String idDelMovedor;
 	private MovedorDeMariscos movedor = new MovedorDeMariscos(this);
 	
@@ -97,4 +97,3 @@ public class ZumaGame {
 //	}
 
 }
-
