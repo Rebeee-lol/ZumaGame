@@ -30,7 +30,7 @@ public class ZumaGame {
 			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0 },
 			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0 },
 			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0 },
-			{ 0, 4, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 2, 0 },
+			{ 0, 4, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 2, 0 },
 			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0 },
 			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0 },
 			{ 0, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0 },
@@ -41,7 +41,7 @@ public class ZumaGame {
 	}
 
 	public void iniciarJuego() {
-		idDelMovedor = controller.executeRepeatedly(movedor, 1000);
+		idDelMovedor = controller.executeRepeatedly(movedor, 500);
 	}
 	
 	public void detenerMovedor() {
@@ -63,6 +63,20 @@ public class ZumaGame {
 	public int[][] getMapaMatriz() {
         return mat;
     }
+	
+	public Marisco mariscoAleatorio(int fila, int columna) {
+		int probabilidad = rnd.nextInt(100);
+		if(probabilidad<2) {
+			return new PezGlobo(1,0,this);
+		} else if (probabilidad<4) {
+			return new Calamar(1,0,this);
+		} else if (probabilidad<7) {
+			return new Camaron (1,0,this);
+		} else {
+			return new PezEstandar(1,0,this);
+		}
+	
+	}
 
 	public void avanzarMariscos() {
 		//Dice a todos los mariscos, uno por uno, que avancen
@@ -71,7 +85,7 @@ public class ZumaGame {
 		}
 		//Saca un nuevo pez estandar
 		if (pecesPorGenerar > 0 && caminoMariscos[1][0] == null) {
-			PezEstandar nuevo = new PezEstandar(1,0, this);
+			Marisco nuevo = mariscoAleatorio(1,0);
 			mariscosEnPantalla.add(nuevo);
 			caminoMariscos[1][0] = nuevo;
 			controller.dibujarEnCelda(1, 0, nuevo.getImagen());
@@ -90,6 +104,10 @@ public class ZumaGame {
 		caminoMariscos[fila][columna] = m;
 		controller.dibujarEnCelda(fila, columna, nombreImagen);
 		
+	}
+
+	public void mostrarColor(int fila, int columna, String peek) {
+		controller.dibujarEnCelda(fila, columna, "pez_" + peek);
 	}
 	
 //	public void start() {
