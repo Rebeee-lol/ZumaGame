@@ -1,1 +1,20 @@
+package projectZumaGame;
+
+public class PezGlobo extends Marisco {
+
+	public PezGlobo(int filas, int columnas, ZumaGame game) {
+		super("globo", filas, columnas, game);
+	}
+	
+	public PezGlobo(int filas, int columnas, ZumaGame game, String color) {
+		super("globo", filas, columnas, game, color);
+	}
+
+	@Override
+	public void impactar() {
+		// TODO Auto-generated method stub
+
+	}
+
+}
 
