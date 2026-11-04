@@ -5,9 +5,13 @@ public class PezEstandar extends Marisco{
 	public PezEstandar(int filas, int columnas, ZumaGame game) {
 		super("pez", filas, columnas, game);
 	}
+	
+	public PezEstandar(int filas, int columnas, ZumaGame game, String color) {
+		super("pez", filas, columnas, game, color);
+	}
 
 	@Override
-	public void Impactar() {
+	public void impactar() {
 	}
 
 }
