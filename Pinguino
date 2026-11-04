@@ -1,10 +1,21 @@
 package projectZumaGame;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Pinguino {
 
 	private int fila = 7;
 	private int col = 10;
 	private String direccion = "ARRIBA";
+	private Queue<String> colores = new LinkedList<>();
+	private ZumaGame game;
+	
+	public Pinguino(ZumaGame game) {
+		this.game = game;
+		colores.offer("rojo");
+		colores.offer("rojo");
+	}
 
 	public void setDireccion(String nuevaDireccion) {
 		this.direccion = nuevaDireccion;
@@ -34,6 +45,14 @@ public class Pinguino {
 
 	public int getCol() {
 		return col;
+	}
+	
+	public void disparar() {
+		String color = colores.poll();
+		//Crear un PezEstandar con el color
+		//Disparar el PezEstandar <- Game
+		colores.offer(color);
+		//game.mostrarColor(colores.peek());
 	}
 
 }
