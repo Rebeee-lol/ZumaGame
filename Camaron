@@ -1,1 +1,20 @@
+package projectZumaGame;
+
+public class Camaron extends Marisco {
+
+	public Camaron(int filas, int columnas, ZumaGame game) {
+		super("camaron", filas, columnas, game);
+	}
+	
+	public Camaron(int filas, int columnas, ZumaGame game, String color) {
+		super("camaron", filas, columnas, game, color);
+	}
+
+	@Override
+	public void impactar() {
+		// TODO Auto-generated method stub
+
+	}
+
+}
 
