@@ -14,7 +14,31 @@ public class Pinguino {
 	public Pinguino(ZumaGame game) {
 		this.game = game;
 		colores.offer("rojo");
+		colores.offer("verde");
 		colores.offer("rojo");
+		colores.offer("amarillo");
+		colores.offer("azul");
+		colores.offer("azul");
+		colores.offer("verde");
+		colores.offer("amarillo");
+		colores.offer("rojo");
+		colores.offer("verde");
+		colores.offer("verde");
+		colores.offer("azul");
+		colores.offer("amarillo");
+		colores.offer("amarillo");
+		colores.offer("rojo");
+		colores.offer("azul");
+		colores.offer("verde");
+		colores.offer("verde");
+		colores.offer("verde");
+		colores.offer("rojo");
+		colores.offer("azul");
+		colores.offer("amarillo");
+		colores.offer("amarillo");
+		colores.offer("verde");
+		colores.offer("rojo");
+		colores.offer("azul");
 	}
 
 	public void setDireccion(String nuevaDireccion) {
@@ -52,7 +76,7 @@ public class Pinguino {
 		//Crear un PezEstandar con el color
 		//Disparar el PezEstandar <- Game
 		colores.offer(color);
-		//game.mostrarColor(colores.peek());
+		game.mostrarColor(7, 8, colores.peek());
 	}
 
 }
