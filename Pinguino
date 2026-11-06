@@ -71,12 +71,17 @@ public class Pinguino {
 		return col;
 	}
 	
+	public String getSiguienteColor() {             //
+		return colores.peek();
+	}
+	
 	public void disparar() {
 		String color = colores.poll();
 		//Crear un PezEstandar con el color
 		//Disparar el PezEstandar <- Game
 		colores.offer(color);
-		game.mostrarColor(7, 8, colores.peek());
+		game.mostrarColor(8, 8, colores.peek());
+		game.generarPezDisparado(fila, col, color, direccion);
 	}
 
 }
