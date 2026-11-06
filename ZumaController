@@ -15,8 +15,21 @@ public class ZumaController implements GameController {
 
 	@Override
 	public void onButtonPressed(String name) {
-		// TODO Auto-generated method stub
-
+		if (name.equals("Reiniciar")) {
+			if (!gameEnded) {
+				game.stop();
+			}
+			gameEnded = false;
+			for (int f = 0; f < 15; f++) {
+				for (int c = 0; c < 21; c++) {
+					graphics.setCellBackgroundImage(f, c, "fondo_" + f + "_" + c);
+					graphics.clearCellObjectImage(f, c);
+				}
+			}
+			graphics.setCellObjectImage(7, 10, "pinguino_arriba");
+			game = new ZumaGame(this);
+			game.iniciarJuego();
+		}
 	}
 
 	@Override
@@ -52,6 +65,7 @@ public class ZumaController implements GameController {
 			}
 		}
 		graphics.setCellObjectImage(7, 10, "pinguino_arriba");
+		graphics.addButton("Reiniciar");
 		game = new ZumaGame(this);
 		game.iniciarJuego();
 	}
