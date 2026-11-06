@@ -81,6 +81,18 @@ public class ZumaController implements GameController {
 		time.stopLoop(id);
 	}
 	
+	public void perdiste() {
+		 gameEnded=true; 
+		 graphics.configureGrid(15, 21, 840, 600, false);
+		 for (int f = 0; f < 15; f++) {
+				for (int c = 0; c < 21; c++) {
+					String nombreImagen = "fila-" + (f + 1) + "-columna-" + (c + 1);
+					graphics.setCellBackgroundImage(f, c, nombreImagen);
+				}
+			}
+			game.stop();
+		}
+	
 //	public String executeRepead
 
 }
