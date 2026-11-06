@@ -40,18 +40,21 @@ public class ZumaController implements GameController {
 
 	@Override
 	public void onKeyPressed(String key) {
-		if (key == null || gameEnded) {
-			return;
-		}
-		String k = key.toLowerCase();
-		if (k.equals("w") || key.equals("UP")) {
-			game.moverPinguino("ARRIBA");
-		} else if (k.equals("s") || key.equals("DOWN")) {
-			game.moverPinguino("ABAJO");
-		} else if (k.equals("a") || key.equals("LEFT")) {
-			game.moverPinguino("IZQUIERDA");
-		} else if (k.equals("d") || key.equals("RIGHT")) {
-			game.moverPinguino("DERECHA");
+		
+		if (key != null && !gameEnded) {
+			
+			String k = key.toLowerCase();
+			if (k.equals("w") || key.equals("UP")) {
+				game.moverPinguino("ARRIBA");
+			} else if (k.equals("s") || key.equals("DOWN")) {
+				game.moverPinguino("ABAJO");
+			} else if (k.equals("a") || key.equals("LEFT")) {
+				game.moverPinguino("IZQUIERDA");
+			} else if (k.equals("d") || key.equals("RIGHT")) {
+				game.moverPinguino("DERECHA");
+			} else if (k.equals("p")) {
+				game.getPinguino().disparar();
+			}
 		}
 
 	}
@@ -107,6 +110,5 @@ public class ZumaController implements GameController {
 			game.stop();
 		}
 	
-//	public String executeRepead
 
 }
