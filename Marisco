@@ -39,6 +39,14 @@ public abstract class Marisco {
 	public String getImagen() {
 		return imagen + "_" + color;
 	}
+	
+	public void setFila(int fila) {
+		this.fila = fila;
+	}
+
+	public void setColumna(int columna) {
+		this.columna = columna;
+	}
 
 	public void mover(int[][] mat) {
 		game.borrarMarisco(fila, columna);
