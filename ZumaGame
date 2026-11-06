@@ -83,6 +83,9 @@ public class ZumaGame {
 		for (Marisco m : mariscosEnPantalla) {
 			m.mover(mat);
 		}
+		if (caminoMariscos[10][4] != null) {
+	        controller.perdiste();
+		}
 		//Saca un nuevo pez estandar
 		if (pecesPorGenerar > 0 && caminoMariscos[1][0] == null) {
 			Marisco nuevo = mariscoAleatorio(1,0);
