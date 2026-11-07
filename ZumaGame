@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class ZumaGame {
 
-	private ZumaController controller;		
+	private ZumaController controller;
 	private Pinguino pinguino = new Pinguino(this);
 	private Marisco[][] caminoMariscos = new Marisco[15][21];
 	private List<Marisco> mariscosEnPantalla = new LinkedList<>();
@@ -14,12 +14,12 @@ public class ZumaGame {
 	private int pecesPorGenerar = 300;
 	private String idDelMovedor;
 	private MovedorDeMariscos movedor = new MovedorDeMariscos(this);
-	
+
 	private PezEstandar pezLanzado;
 	private String direccionDisparo;
 	private String idDelPezDisparado;
 	private MovedorDePecesDisparados movedorDisparo = new MovedorDePecesDisparados(this);
-	
+
 	private int[][] mat = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0 },
@@ -42,9 +42,9 @@ public class ZumaGame {
 
 	public void iniciarJuego() {
 		mostrarColor(8, 8, pinguino.getSiguienteColor());
-		idDelMovedor = controller.executeRepeatedly(movedor, 100);
+		idDelMovedor = controller.executeRepeatedly(movedor, 500);
 	}
-	
+
 	public void stop() {
 		controller.stopLoop(idDelMovedor);
 	}
@@ -60,52 +60,55 @@ public class ZumaGame {
 		String imagen = this.pinguino.getCambioDeImagen();
 		this.controller.dibujarEnCelda(f, c, imagen);
 	}
-	
+
 	public int[][] getMapaMatriz() {
-        return mat;
-    }
-	
+		return mat;
+	}
+
 	public Marisco mariscoAleatorio(int fila, int columna) {
 		int probabilidad = rnd.nextInt(100);
-		if(probabilidad<2) {
-			return new PezGlobo(1,0,this);
-		} else if (probabilidad<4) {
-			return new Calamar(1,0,this);
-		} else if (probabilidad<7) {
-			return new Camaron (1,0,this);
+		if (probabilidad < 2) {
+			return new PezGlobo(1, 0, this);
+		} else if (probabilidad < 4) {
+			return new Calamar(1, 0, this);
+		} else if (probabilidad < 7) {
+			return new Camaron(1, 0, this);
 		} else {
-			return new PezEstandar(1,0,this);
+			return new PezEstandar(1, 0, this);
 		}
-	
+
 	}
 
 	public void avanzarMariscos() {
-		for (Marisco m : mariscosEnPantalla) {
-			m.mover(mat);
+		if (!pausado) {
+			verificarSeries();
+			for (Marisco m : mariscosEnPantalla) {
+				m.mover(mat);
+			}
+			if (caminoMariscos[10][4] != null) {
+				controller.perdiste();
+			}
+			if (pecesPorGenerar > 0 && caminoMariscos[1][0] == null) {
+				Marisco nuevo = mariscoAleatorio(1, 0);
+				mariscosEnPantalla.add(nuevo);
+				caminoMariscos[1][0] = nuevo;
+				controller.dibujarEnCelda(1, 0, nuevo.getImagen());
+				pecesPorGenerar--;
+			}
+			redibujarPinguino();
 		}
-		if (caminoMariscos[10][4] != null) {
-	        controller.perdiste();
-		}
-		if (pecesPorGenerar > 0 && caminoMariscos[1][0] == null) {
-			Marisco nuevo = mariscoAleatorio(1,0);
-			mariscosEnPantalla.add(nuevo);
-			caminoMariscos[1][0] = nuevo;
-			controller.dibujarEnCelda(1, 0, nuevo.getImagen());
-			pecesPorGenerar--;
-		}
-		redibujarPinguino();
 	}
 
 	public void borrarMarisco(int fila, int columna) {
 		caminoMariscos[fila][columna] = null;
-		controller.limpiarCelda(fila, columna);	
-		
+		controller.limpiarCelda(fila, columna);
+
 	}
 
 	public void dibujarMarisco(int fila, int columna, String nombreImagen, Marisco m) {
 		caminoMariscos[fila][columna] = m;
 		controller.dibujarEnCelda(fila, columna, nombreImagen);
-		
+
 	}
 
 	public void mostrarColor(int fila, int columna, String peek) {
@@ -114,8 +117,8 @@ public class ZumaGame {
 
 	public void generarPezDisparado(int fila, int col, String color, String direccion) {
 		if (pezLanzado == null) {
-			int filaInicial = fila;  // 7
-			int colInicial = col;   //10
+			int filaInicial = fila; // 7
+			int colInicial = col; // 10
 			if (direccion.equals("ARRIBA")) {
 				filaInicial--;
 			} else if (direccion.equals("ABAJO")) {
@@ -128,12 +131,13 @@ public class ZumaGame {
 			pezLanzado = new PezEstandar(filaInicial, colInicial, this, color);
 			direccionDisparo = direccion;
 			controller.dibujarEnCelda(filaInicial, colInicial, pezLanzado.getImagen());
-			idDelPezDisparado = controller.executeRepeatedly(movedorDisparo, 80); // para una mejor jugabilidad el disparo debe ser mas rapido que los peces
+			idDelPezDisparado = controller.executeRepeatedly(movedorDisparo, 80); // para una mejor jugabilidad el
+																					// disparo debe ser mas rapido que
+																					// los peces
 		}
 	}
 
 	public void avanzarPezDisparado() {
-
 		if (pezLanzado != null) {
 			int filaActual = pezLanzado.getFilas();
 			int colActual = pezLanzado.getColumnas();
@@ -148,8 +152,23 @@ public class ZumaGame {
 			} else if (direccionDisparo.equals("DERECHA")) {
 				colActual++;
 			}
-			if (filaActual < 0 || filaActual >= 15 || colActual < 0 || colActual >= 21 || caminoMariscos[filaActual][colActual] != null) {
+			if (filaActual < 0 || filaActual >= 15 || colActual < 0 || colActual >= 21) {
 				detenerDisparo();
+			} else if (caminoMariscos[filaActual][colActual] != null) {
+				pezLanzado.setFila(filaActual);
+				pezLanzado.setColumna(colActual);
+				int i = 0;
+				while (mariscosEnPantalla.get(i) != caminoMariscos[filaActual][colActual]) {
+					mariscosEnPantalla.get(i).mover(mat);
+					i++;
+					if (i == mariscosEnPantalla.size()) {
+						throw new IllegalStateException();
+					}
+				}
+				caminoMariscos[filaActual][colActual].mover(mat);
+				mariscosEnPantalla.add(i + 1, pezLanzado);
+				detenerDisparo();
+				puntaje++;
 			} else {
 				pezLanzado.setFila(filaActual);
 				pezLanzado.setColumna(colActual);
@@ -157,7 +176,7 @@ public class ZumaGame {
 			}
 		}
 	}
-	
+
 	public void detenerDisparo() {
 		controller.stopLoop(idDelPezDisparado);
 		pezLanzado = null;
@@ -167,5 +186,16 @@ public class ZumaGame {
 		return pinguino;
 	}
 
-	
+	public void verificarSeries() {
+		// recorro la lista desde i = 0
+		int i = 0;
+		while (i < mariscosEnPantalla.size()) {
+			// si encuentro tres o más seguidos iguales
+			// - Quito a esos iguales de la lista
+			// -Vuelvo hacia atrás en la lista con el indice i diciendo que retrocedan
+			// varias veces
+		}
+
+	}
+
 }
