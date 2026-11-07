@@ -40,6 +40,10 @@ public abstract class Marisco {
 		return imagen + "_" + color;
 	}
 	
+	public ZumaGame getGame() {
+		return game;
+	}
+
 	public void setFila(int fila) {
 		this.fila = fila;
 	}
@@ -53,7 +57,7 @@ public abstract class Marisco {
 		int dir = mat[fila][columna]; // leer ANTES de cambiar nada
 		if (dir == 1) {
 			columna++; // derecha
-		} else if (dir == 2) {
+		} else if (dir == 2 || dir == 5) {
 			fila++; // abajo
 		} else if (dir == 3) {
 			columna--; // izquierda
@@ -61,6 +65,10 @@ public abstract class Marisco {
 			fila--; // arriba
 		}
 		game.dibujarMarisco(fila,columna, getImagen(), this); 
+	}
+	
+	public void retroceder(int[][] mat) {
+		
 	}
 
 	@Override
