@@ -1,0 +1,15 @@
+package projectZumaGame;
+
+public class Despausador implements Runnable {
+
+	private ZumaGame game; 
+	public Despausador(ZumaGame game ){
+		this.game=game; 
+	}
+
+	@Override
+	public void run() {
+		game.despausar();
+	}
+
+}
