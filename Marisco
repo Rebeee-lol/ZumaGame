@@ -85,9 +85,6 @@ public abstract class Marisco {
 		return imagen.hashCode();
 	}
 
-	public abstract void impactar();
-
-	// falta comparar que esten en la misma fila y columna para que colisionen y
-	// borren
+	public abstract void impactar(int fila, int columna)
 
 }
