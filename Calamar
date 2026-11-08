@@ -8,8 +8,7 @@ public class Calamar extends Marisco {
 
 	@Override
 	public void impactar() {
-		// TODO Auto-generated method stub
-
+			getGame().sumarPuntaje(5);
 	}
 
 }
