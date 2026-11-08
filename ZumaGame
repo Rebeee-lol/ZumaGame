@@ -72,18 +72,17 @@ public class ZumaGame {
 	}
 
 	public Marisco mariscoAleatorio(int fila, int columna) {
+		public Marisco mariscoAleatorio(int fila, int columna) {
 		int probabilidad = rnd.nextInt(100);
-		if (probabilidad < 2) {
-			return new PezGlobo(1, 0, this);
-		} else if (probabilidad < 4) {
+		if (probabilidad < 3) {
 			return new Calamar(1, 0, this);
-		} else if (probabilidad < 7) {
+		} else if (probabilidad < 6) {
 			return new Camaron(1, 0, this);
 		} else {
 			return new PezEstandar(1, 0, this);
 		}
-
 	}
+}
 
 	public void avanzarMariscos() {
 		if (!pausado) {
