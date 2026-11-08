@@ -7,8 +7,8 @@ public class Camaron extends Marisco {
 	}
 
 	@Override
-	public void impactar() {
-		getGame().pausar();
+	public void impactar(int fila, int columna) {
+		getGame().pausar(fila ,columna);
 	}
 
 }
