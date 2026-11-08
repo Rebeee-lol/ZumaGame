@@ -8,8 +8,7 @@ public class Camaron extends Marisco {
 
 	@Override
 	public void impactar() {
-		// TODO Auto-generated method stub
-
+		getGame().pausar();
 	}
 
 }
