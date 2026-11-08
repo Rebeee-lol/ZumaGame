@@ -12,7 +12,7 @@ public class PezEstandar extends Marisco{
 
 	@Override
 	public void impactar() {
-		getGame().colar(this, )
+		getGame().colar(this)
 	}
 
 }
