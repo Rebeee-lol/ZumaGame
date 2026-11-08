@@ -7,7 +7,7 @@ public class Calamar extends Marisco {
 	}
 
 	@Override
-	public void impactar() {
+	public void impactar(int fila, int columna) {
 			getGame().sumarPuntaje(5);
 	}
 
