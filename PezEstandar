@@ -11,8 +11,8 @@ public class PezEstandar extends Marisco{
 	}
 
 	@Override
-	public void impactar() {
-		getGame().colar(this)
+	public void impactar(int fila, int columna) {
+		getGame().colar(this,  fila, columna)
 	}
 
 }
