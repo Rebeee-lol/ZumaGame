@@ -195,7 +195,7 @@ public class ZumaGame {
 		}
 }
 
-	public void pausar() {
+	public void pausar(int fila, int columna) {
 		if (!pausado) {
 			pausado = true;
 			idDelDespausador = controller.executeRepeatedly(despausador, 7000);
@@ -213,8 +213,7 @@ public class ZumaGame {
 	}
 	
 	public void colar(PezEstandar pezLanzado) {
-		int filaActual = pezLanzado.getFilas();
-		int colActual = pezLanzado.getColumnas();
+		public void colar(PezEstandar pezLanzado, int filaActual, int colActual) {
 		if (caminoMariscos[filaActual][colActual] != null) {
 			int i = 0;
 			while (mariscosEnPantalla.get(i) != caminoMariscos[filaActual][colActual]) {
@@ -227,7 +226,7 @@ public class ZumaGame {
 			caminoMariscos[filaActual][colActual].mover(mat);
 			mariscosEnPantalla.add(i + 1, pezLanzado);
 			dibujarMarisco(filaActual, colActual, pezLanzado.getImagen(), pezLanzado);
-			}
 		}
 	}
+}
 
