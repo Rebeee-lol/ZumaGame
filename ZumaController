@@ -61,6 +61,11 @@ public class ZumaController implements GameController {
 
 	@Override
 	public void initialiseInterface() {
+		graphics.configureGrid(1, 1, 840, 600, false);
+		graphics.setCellBackgroundImage( 0, 0, "Start");
+	}
+
+	public void empezarJuego() {
 		graphics.configureGrid(15, 21, 840, 600, false);
 		for (int f = 0; f < 15; f++) {
 			for (int c = 0; c < 21; c++) {
@@ -68,9 +73,10 @@ public class ZumaController implements GameController {
 			}
 		}
 		graphics.setCellObjectImage(7, 10, "pinguino_arriba");
-		graphics.addButton("Reiniciar");
+		graphics.addButton("Reiniciar"); 
 		game = new ZumaGame(this);
 		game.iniciarJuego();
+
 	}
 
 	@Override
@@ -109,6 +115,9 @@ public class ZumaController implements GameController {
 			}
 			game.stop();
 		}
-	
+
+	public void mostrarPuntaje(int puntaje) {
+		graphics.setLabel("puntaje", "Puntaje: " + puntaje);
+	}
 
 }
