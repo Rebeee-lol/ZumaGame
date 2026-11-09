@@ -185,15 +185,49 @@ public class ZumaGame {
 	}
 
 	public void verificarSeries() {
-		// recorro la lista desde i = 0
-		int i = 0;
-		while (i < mariscosEnPantalla.size()) {
-			// si encuentro tres o más seguidos iguales
-			// - Quito a esos iguales de la lista
-			// -Vuelvo hacia atrás en la lista con el indice i diciendo que retrocedan
-			// varias veces
+			if (mariscosEnPantalla.size() >= 3) {
+			int centro = -1;
+			for (int i = 0; i < mariscosEnPantalla.size(); i++) {
+				Marisco m = mariscosEnPantalla.get(i);
+				if (m.getFilas() == filaImpacto && m.getColumnas() == colImpacto) {
+					centro = i;
+				}
+			}
+			if (centro != -1) {
+				Marisco pezInsertado = mariscosEnPantalla.get(centro);
+				int inicio = centro;
+				while (inicio > 0 && mariscosEnPantalla.get(inicio - 1).equals(pezInsertado)) {
+					inicio--;
+				}
+				int fin = centro;
+				while (fin < mariscosEnPantalla.size() - 1 && mariscosEnPantalla.get(fin + 1).equals(pezInsertado)) {
+					fin++;
+				}
+				int contador = (fin - inicio) + 1;
+				if (contador >= 3) {
+					int eliminados = contador; //se usa en el for de retroceder
+					for (int k = inicio; k <= fin; k++) {
+						Marisco m = mariscosEnPantalla.get(k);
+						borrarMarisco(m.getFilas(), m.getColumnas());
+						m.impactar(m.getFilas(), m.getColumnas());
+					}
+					puntaje ++;
+					controller.mostrarPuntaje(puntaje);
+					
+					for (int k = fin; k >= inicio; k--) {
+						mariscosEnPantalla.remove(k);
+					}
+					if(inicio<mariscosEnPantalla.size()) {
+						for (int paso=0; paso<eliminados;paso++) {
+							for(int k= inicio -1; k>=0; k--) {
+								mariscosEnPantalla.get(k).retroceder(mat);
+							}
+						}
+					}
+				}
+			}
 		}
-}
+	}
 
 	public void pausar(int fila, int columna) {
 		if (!pausado) {
