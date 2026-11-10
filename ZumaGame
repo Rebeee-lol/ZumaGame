@@ -97,9 +97,9 @@ public class ZumaGame {
 	// MARISCOS Y CAMINO
 	public Marisco mariscoAleatorio(int fila, int columna) {
 		int probabilidad = rnd.nextInt(100);
-		if (probabilidad < 60) {
+		if (probabilidad < 4) {
 			return new Calamar(1, 0, this);
-		} else if (probabilidad < 6) {
+		} else if (probabilidad < 8) {
 			return new Camaron(1, 0, this);
 		} else {
 			return new PezEstandar(1, 0, this);
