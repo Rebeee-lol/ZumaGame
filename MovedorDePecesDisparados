@@ -1,18 +1,19 @@
 package projectZumaGame;
 
-public class MovedorDePecesDisparados implements Runnable{
-	
-private ZumaGame game;
-	
-	public MovedorDePecesDisparados (ZumaGame game) {
-		this.game=game;
+public class MovedorDePecesDisparados implements Runnable {
+
+	// ATRIBUTOS
+	private ZumaGame game;
+
+	// CONSTRUCTORES
+	public MovedorDePecesDisparados(ZumaGame game) {
+		this.game = game;
 	}
 
+	// MÉTODO
 	@Override
 	public void run() {
 		game.avanzarPezDisparado();
-		
 	}
-
 
 }
