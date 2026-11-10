@@ -1,18 +1,21 @@
 package projectZumaGame;
 
-public class PezEstandar extends Marisco{
+public class PezEstandar extends Marisco {
 
+	// CONSTRUCTORES
 	public PezEstandar(int filas, int columnas, ZumaGame game) {
 		super("pez", filas, columnas, game);
 	}
-	
+
 	public PezEstandar(int filas, int columnas, ZumaGame game, String color) {
 		super("pez", filas, columnas, game, color);
 	}
 
+	// MÉTODO
 	@Override
 	public void impactar(int fila, int columna) {
-		getGame().colar(this,  fila, columna)
+		getGame().colarPezDisparado(this, fila, columna);
+		getGame().sonido("pop");
 	}
 
 }
