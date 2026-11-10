@@ -6,6 +6,7 @@ import java.util.Random;
 
 public class ZumaGame {
 
+	// ATRIBUTOS
 	private ZumaController controller;
 	private Pinguino pinguino = new Pinguino(this);
 	private Marisco[][] caminoMariscos = new Marisco[15][21];
@@ -14,16 +15,18 @@ public class ZumaGame {
 	private int pecesPorGenerar = 300;
 	private String idDelMovedor;
 	private MovedorDeMariscos movedor = new MovedorDeMariscos(this);
-	private boolean pausado = false;
-	private int puntaje = 0;
+
 	private PezEstandar pezLanzado;
 	private String direccionDisparo;
 	private String idDelPezDisparado;
 	private MovedorDePecesDisparados movedorDisparo = new MovedorDePecesDisparados(this);
+
+	private boolean pausado = false;
+	private int puntaje = 0;
 	private Despausador despausador = new Despausador(this);
 	private String idDelDespausador;
 
-	private int[][] mat = { 
+	private int[][] mat = {
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0 },
@@ -38,24 +41,43 @@ public class ZumaGame {
 			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0 },
 			{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0 },
 			{ 0, 7, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 0 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, };
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+	};
 
+	// CONSTRUCTORES
 	public ZumaGame(ZumaController controller) {
 		this.controller = controller;
 	}
 
+	// GETTERS Y SETTERS
+	public Pinguino getPinguino() {
+		return pinguino;
+	}
+
+	public int[][] getMapaMatriz() {
+		return mat;
+	}
+
+	// CONTROL DE JUEGO
 	public void iniciarJuego() {
-		public void iniciarJuego() {
 		mostrarColor(8, 8, pinguino.getSiguienteColor());
 		idDelMovedor = controller.executeRepeatedly(movedor, 700);
 		controller.mostrarPuntaje(puntaje);
 	}
-}
 
 	public void stop() {
-		controller.stopLoop(idDelMovedor);
+		if (idDelMovedor != null) {
+			controller.stopLoop(idDelMovedor);
+		}
+		if (idDelPezDisparado != null) {
+			controller.stopLoop(idDelPezDisparado);
+		}
+		if (idDelDespausador != null) {
+			controller.stopLoop(idDelDespausador);
+		}
 	}
 
+	// PINGÜINO
 	public void moverPinguino(String direccion) {
 		this.pinguino.setDireccion(direccion);
 		redibujarPinguino();
@@ -68,14 +90,14 @@ public class ZumaGame {
 		this.controller.dibujarEnCelda(f, c, imagen);
 	}
 
-	public int[][] getMapaMatriz() {
-		return mat;
+	public void mostrarColor(int fila, int columna, String peek) {
+		controller.dibujarEnCelda(fila, columna, "pez_" + peek);
 	}
 
+	// MARISCOS Y CAMINO
 	public Marisco mariscoAleatorio(int fila, int columna) {
-		public Marisco mariscoAleatorio(int fila, int columna) {
 		int probabilidad = rnd.nextInt(100);
-		if (probabilidad < 3) {
+		if (probabilidad < 60) {
 			return new Calamar(1, 0, this);
 		} else if (probabilidad < 6) {
 			return new Camaron(1, 0, this);
@@ -83,110 +105,39 @@ public class ZumaGame {
 			return new PezEstandar(1, 0, this);
 		}
 	}
-}
 
 	public void avanzarMariscos() {
 		if (!pausado) {
-			verificarSeries();
 			for (Marisco m : mariscosEnPantalla) {
 				m.mover(mat);
 			}
 			if (caminoMariscos[10][4] != null) {
 				controller.perdiste();
+			} else {
+				if (pecesPorGenerar > 0 && caminoMariscos[1][0] == null) {
+					Marisco nuevo = mariscoAleatorio(1, 0);
+					mariscosEnPantalla.add(nuevo);
+					caminoMariscos[1][0] = nuevo;
+					controller.dibujarEnCelda(1, 0, nuevo.getImagen());
+					pecesPorGenerar--;
+				}
+				redibujarPinguino();
 			}
-			if (pecesPorGenerar > 0 && caminoMariscos[1][0] == null) {
-				Marisco nuevo = mariscoAleatorio(1, 0);
-				mariscosEnPantalla.add(nuevo);
-				caminoMariscos[1][0] = nuevo;
-				controller.dibujarEnCelda(1, 0, nuevo.getImagen());
-				pecesPorGenerar--;
-			}
-			redibujarPinguino();
 		}
 	}
 
 	public void borrarMarisco(int fila, int columna) {
 		caminoMariscos[fila][columna] = null;
 		controller.limpiarCelda(fila, columna);
-
 	}
 
 	public void dibujarMarisco(int fila, int columna, String nombreImagen, Marisco m) {
 		caminoMariscos[fila][columna] = m;
 		controller.dibujarEnCelda(fila, columna, nombreImagen);
-
 	}
 
-	public void mostrarColor(int fila, int columna, String peek) {
-		controller.dibujarEnCelda(fila, columna, "pez_" + peek);
-	}
-
-	public void generarPezDisparado(int fila, int col, String color, String direccion) {
-		public void generarPezDisparado(int fila, int col, String color, String direccion) {
-		if (pezLanzado == null) {
-			int filaInicial = fila; // 7
-			int colInicial = col; // 10
-			if (direccion.equals("ARRIBA")) {
-				filaInicial--;
-			} else if (direccion.equals("ABAJO")) {
-				filaInicial++;
-			} else if (direccion.equals("IZQUIERDA")) {
-				colInicial--;
-			} else if (direccion.equals("DERECHA")) {
-				colInicial++;
-			}
-			pezLanzado = new PezEstandar(filaInicial, colInicial, this, color);
-			direccionDisparo = direccion;
-			controller.dibujarEnCelda(filaInicial, colInicial, pezLanzado.getImagen());
-			idDelPezDisparado = controller.executeRepeatedly(movedorDisparo, 50); // para una mejor jugabilidad el disparo debe ser mas rapido que los peces
-			puntaje++; // TODO
-			controller.mostrarPuntaje(puntaje);
-		}
-	}
-}
-
-	public void avanzarPezDisparado() {
-		if (pezLanzado != null) {
-			int filaActual = pezLanzado.getFilas();
-			int colActual = pezLanzado.getColumnas();
-			controller.limpiarCelda(filaActual, colActual);
-
-			if (direccionDisparo.equals("ARRIBA")) {
-				filaActual--;
-			} else if (direccionDisparo.equals("ABAJO")) {
-				filaActual++;
-			} else if (direccionDisparo.equals("IZQUIERDA")) {
-				colActual--;
-			} else if (direccionDisparo.equals("DERECHA")) {
-				colActual++;
-			}
-			if (filaActual < 0 || filaActual >= 15 || colActual < 0 || colActual >= 21) {
-				detenerDisparo();
-			} else if (caminoMariscos[filaActual][colActual] != null) {
-				pezLanzado.setFila(filaActual);
-				pezLanzado.setColumna(colActual);
-				pezLanzado.impactar();
-				detenerDisparo();
-			} else {
-				pezLanzado.setFila(filaActual);
-				pezLanzado.setColumna(colActual);
-				controller.dibujarEnCelda(filaActual, colActual, pezLanzado.getImagen());
-			}
-		}
-	}
-
-
-	public void detenerDisparo() {
-		controller.stopLoop(idDelPezDisparado);
-		pezLanzado = null;
-	}
-
-	public Pinguino getPinguino() {
-		return pinguino;
-	}
-
-	public void verificarSeries() {
-			if (mariscosEnPantalla.size() >= 3) {
+	public void verificarSeries(int filaImpacto, int colImpacto) {
+		if (mariscosEnPantalla.size() >= 3) {
 			int centro = -1;
 			for (int i = 0; i < mariscosEnPantalla.size(); i++) {
 				Marisco m = mariscosEnPantalla.get(i);
@@ -206,21 +157,20 @@ public class ZumaGame {
 				}
 				int contador = (fin - inicio) + 1;
 				if (contador >= 3) {
-					int eliminados = contador; //se usa en el for de retroceder
+					int eliminados = contador;
 					for (int k = inicio; k <= fin; k++) {
 						Marisco m = mariscosEnPantalla.get(k);
 						borrarMarisco(m.getFilas(), m.getColumnas());
 						m.impactar(m.getFilas(), m.getColumnas());
 					}
-					puntaje ++;
-					controller.mostrarPuntaje(puntaje);
-					
+					sumarPuntaje(1);
+
 					for (int k = fin; k >= inicio; k--) {
 						mariscosEnPantalla.remove(k);
 					}
-					if(inicio<mariscosEnPantalla.size()) {
-						for (int paso=0; paso<eliminados;paso++) {
-							for(int k= inicio -1; k>=0; k--) {
+					if (inicio < mariscosEnPantalla.size()) {
+						for (int paso = 0; paso < eliminados; paso++) {
+							for (int k = inicio - 1; k >= 0; k--) {
 								mariscosEnPantalla.get(k).retroceder(mat);
 							}
 						}
@@ -229,7 +179,86 @@ public class ZumaGame {
 			}
 		}
 	}
+	
+	// PEZ DISPARADO
+		public boolean generarPezDisparado(int fila, int col, String color, String direccion) {
+			if (pezLanzado == null) {
+				int filaInicial = fila;
+				int colInicial = col;
+				if (direccion.equals("ARRIBA")) {
+					filaInicial--;
+				} else if (direccion.equals("ABAJO")) {
+					filaInicial++;
+				} else if (direccion.equals("IZQUIERDA")) {
+					colInicial--;
+				} else if (direccion.equals("DERECHA")) {
+					colInicial++;
+				}
+				pezLanzado = new PezEstandar(filaInicial, colInicial, this, color);
+				direccionDisparo = direccion;
+				controller.dibujarEnCelda(filaInicial, colInicial, pezLanzado.getImagen());
+				idDelPezDisparado = controller.executeRepeatedly(movedorDisparo, 80);
+				sonido("disparar");
+				return true;
+			}
+			return false;
+		}
 
+		public void avanzarPezDisparado() {
+			if (pezLanzado != null) {
+				int filaActual = pezLanzado.getFilas();
+				int colActual = pezLanzado.getColumnas();
+				controller.limpiarCelda(filaActual, colActual);
+
+				if (direccionDisparo.equals("ARRIBA")) {
+					filaActual--;
+				} else if (direccionDisparo.equals("ABAJO")) {
+					filaActual++;
+				} else if (direccionDisparo.equals("IZQUIERDA")) {
+					colActual--;
+				} else if (direccionDisparo.equals("DERECHA")) {
+					colActual++;
+				}
+
+				if (filaActual < 0 || filaActual >= 15 || colActual < 0 || colActual >= 21) {
+					detenerDisparo();
+				} else if (caminoMariscos[filaActual][colActual] != null) {
+					pezLanzado.setFila(filaActual);
+					pezLanzado.setColumna(colActual);
+					PezEstandar proyectil = pezLanzado;
+					detenerDisparo();
+					proyectil.impactar(filaActual, colActual);
+					verificarSeries(filaActual, colActual);
+				} else {
+					pezLanzado.setFila(filaActual);
+					pezLanzado.setColumna(colActual);
+					controller.dibujarEnCelda(filaActual, colActual, pezLanzado.getImagen());
+				}
+			}
+		}
+
+		public void colarPezDisparado(PezEstandar pezLanzado, int filaActual, int colActual) {
+			if (caminoMariscos[filaActual][colActual] != null) {
+				int i = 0;
+				while (i < mariscosEnPantalla.size() && mariscosEnPantalla.get(i) != caminoMariscos[filaActual][colActual]) {
+					mariscosEnPantalla.get(i).mover(mat);
+					i++;
+				}
+				if (i == mariscosEnPantalla.size()) {
+					throw new IllegalStateException();
+				}
+				caminoMariscos[filaActual][colActual].mover(mat);
+				mariscosEnPantalla.add(i + 1, pezLanzado);
+				dibujarMarisco(filaActual, colActual, pezLanzado.getImagen(), pezLanzado);
+			}
+		}
+
+		public void detenerDisparo() {
+			controller.stopLoop(idDelPezDisparado);
+			pezLanzado = null;
+		}
+
+	// EFECTOS Y PUNTAJE
 	public void pausar(int fila, int columna) {
 		if (!pausado) {
 			pausado = true;
@@ -241,27 +270,17 @@ public class ZumaGame {
 		pausado = false;
 		controller.stopLoop(idDelDespausador);
 	}
-	
+
 	public void sumarPuntaje(int puntajeExtra) {
-		puntaje= puntaje + puntajeExtra;
+		puntaje = puntaje + puntajeExtra;
 		controller.mostrarPuntaje(puntaje);
-	}
-	
-	public void colar(PezEstandar pezLanzado) {
-		public void colar(PezEstandar pezLanzado, int filaActual, int colActual) {
-		if (caminoMariscos[filaActual][colActual] != null) {
-			int i = 0;
-			while (mariscosEnPantalla.get(i) != caminoMariscos[filaActual][colActual]) {
-				mariscosEnPantalla.get(i).mover(mat);
-				i++;
-				if (i == mariscosEnPantalla.size()) {
-					throw new IllegalStateException();
-				}
-			}
-			caminoMariscos[filaActual][colActual].mover(mat);
-			mariscosEnPantalla.add(i + 1, pezLanzado);
-			dibujarMarisco(filaActual, colActual, pezLanzado.getImagen(), pezLanzado);
+		if (puntaje >= 30) {
+			controller.ganaste();
 		}
 	}
-}
 
+	public void sonido(String nombreSonido) {
+		controller.aniadirSonido(nombreSonido);
+	}
+
+}
