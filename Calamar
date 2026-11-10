@@ -2,14 +2,16 @@ package projectZumaGame;
 
 public class Calamar extends Marisco {
 
+	// CONSTRUCTORES
 	public Calamar(int filas, int columnas, ZumaGame game) {
 		super("calamar", filas, columnas, game);
 	}
 
+	// MÉTODOS
 	@Override
 	public void impactar(int fila, int columna) {
-			getGame().sumarPuntaje(5);
+		getGame().sumarPuntaje(5);
+		getGame().sonido("puntaje");
 	}
 
 }
-
