@@ -3,69 +3,74 @@ package projectZumaGame;
 import edu.upb.lp.game.core.GameController;
 import edu.upb.lp.game.core.GraphicsLibrary;
 import edu.upb.lp.game.core.MainLibrary;
+import edu.upb.lp.game.core.SoundLibrary;
 import edu.upb.lp.game.core.TimeLibrary;
 
 public class ZumaController implements GameController {
 
 	private MainLibrary library;
 	private GraphicsLibrary graphics;
+	private SoundLibrary sounds;
 	private TimeLibrary time;
 	private ZumaGame game;
 	private boolean gameEnded = false;
 
 	@Override
+	public void setLibrary(MainLibrary library) {
+		this.library = library;
+		this.graphics = library.getGraphics();
+		this.time = library.getTime();
+		this.sounds = library.getSound();
+	}
+
+	public ZumaGame getGame() {
+		return game;
+	}
+
+	@Override
 	public void onButtonPressed(String name) {
 		if (name.equals("Reiniciar")) {
-			if (!gameEnded) {
+			if (!gameEnded && game != null) {
 				game.stop();
 			}
 			gameEnded = false;
-			for (int f = 0; f < 15; f++) {
-				for (int c = 0; c < 21; c++) {
-					graphics.setCellBackgroundImage(f, c, "fondo_" + f + "_" + c);
-					graphics.clearCellObjectImage(f, c);
-				}
-			}
-			graphics.setCellObjectImage(7, 10, "pinguino_arriba");
-			game = new ZumaGame(this);
-			game.iniciarJuego();
+			empezarJuego();
 		}
 	}
 
 	@Override
 	public void onCellPressed(int row, int col) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onKeyPressed(String key) {
-		
-		if (key != null && !gameEnded) {
-			
-			String k = key.toLowerCase();
-			if (k.equals("w") || key.equals("UP")) {
-				game.moverPinguino("ARRIBA");
-			} else if (k.equals("s") || key.equals("DOWN")) {
-				game.moverPinguino("ABAJO");
-			} else if (k.equals("a") || key.equals("LEFT")) {
-				game.moverPinguino("IZQUIERDA");
-			} else if (k.equals("d") || key.equals("RIGHT")) {
-				game.moverPinguino("DERECHA");
-			} else if (k.equals("p")) {
-				game.getPinguino().disparar();
-			}
+		if (key.equals("ENTER")) {
+			empezarJuego();
 		}
-
+		String k = key.toLowerCase();
+		if (k.equals("w") || key.equals("UP")) {
+			game.moverPinguino("ARRIBA");
+		} else if (k.equals("s") || key.equals("DOWN")) {
+			game.moverPinguino("ABAJO");
+		} else if (k.equals("a") || key.equals("LEFT")) {
+			game.moverPinguino("IZQUIERDA");
+		} else if (k.equals("d") || key.equals("RIGHT")) {
+			game.moverPinguino("DERECHA");
+		} else if (k.equals("p")) {
+			game.getPinguino().disparar();
+		}
 	}
 
 	@Override
 	public void initialiseInterface() {
 		graphics.configureGrid(1, 1, 840, 600, false);
-		graphics.setCellBackgroundImage( 0, 0, "Start");
+		graphics.setCellBackgroundImage(0, 0, "Start");
+		aniadirSonido("inicio");
 	}
 
 	public void empezarJuego() {
+		sounds.stopSounds();
 		graphics.configureGrid(15, 21, 840, 600, false);
 		for (int f = 0; f < 15; f++) {
 			for (int c = 0; c < 21; c++) {
@@ -73,20 +78,39 @@ public class ZumaController implements GameController {
 			}
 		}
 		graphics.setCellObjectImage(7, 10, "pinguino_arriba");
-		graphics.addButton("Reiniciar"); 
+		graphics.addButton("Reiniciar");
+		sounds.playSound("juego");
 		game = new ZumaGame(this);
 		game.iniciarJuego();
-
 	}
 
-	@Override
-	public void setLibrary(MainLibrary library) {
-		this.library = library;
-		this.graphics = library.getGraphics();
-		this.time = library.getTime();
+	public void perdiste() {
+		gameEnded = true;
+		if (game != null) {
+			game.stop();
+		}
+		sounds.stopSounds();
+		aniadirSonido("perder");
+		graphics.configureGrid(15, 21, 840, 600, false);
+		for (int f = 0; f < 15; f++) {
+			for (int c = 0; c < 21; c++) {
+				String nombreImagen = "fila-" + (f + 1) + "-columna-" + (c + 1);
+				graphics.setCellBackgroundImage(f, c, nombreImagen);
+			}
+		}
 	}
-	
-	
+
+	public void ganaste() {
+		gameEnded = true;
+		if (game != null) {
+			game.stop();
+		}
+		sounds.stopSounds();
+		aniadirSonido("victoria");
+		graphics.configureGrid(1, 1, 840, 600, false);
+		graphics.setCellBackgroundImage(0, 0, "victoria");
+	}
+
 	public void dibujarEnCelda(int fila, int col, String nombreImagen) {
 		graphics.setCellObjectImage(fila, col, nombreImagen);
 	}
@@ -95,29 +119,26 @@ public class ZumaController implements GameController {
 		graphics.clearCellObjectImage(fila, col);
 	}
 
+	public void mostrarPuntaje(int puntaje) {
+		graphics.setLabel("puntaje", "Puntaje: " + puntaje);
+	}
+
+	// TEMPORIZADORES
 	public String executeRepeatedly(Runnable r, int ms) {
 		return time.executeRepeatedly(r, ms);
-		
 	}
 
 	public void stopLoop(String id) {
 		time.stopLoop(id);
 	}
-	
-	public void perdiste() {
-		 gameEnded=true; 
-		 graphics.configureGrid(15, 21, 840, 600, false);
-		 for (int f = 0; f < 15; f++) {
-				for (int c = 0; c < 21; c++) {
-					String nombreImagen = "fila-" + (f + 1) + "-columna-" + (c + 1);
-					graphics.setCellBackgroundImage(f, c, nombreImagen);
-				}
-			}
-			game.stop();
-		}
 
-	public void mostrarPuntaje(int puntaje) {
-		graphics.setLabel("puntaje", "Puntaje: " + puntaje);
+	// AUDIO
+	public void aniadirSonido(String nombreSonido) {
+		sounds.playSound(nombreSonido);
+	}
+
+	public void detenerSonido() {
+		sounds.stopSounds();
 	}
 
 }
