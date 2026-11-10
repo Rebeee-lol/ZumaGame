@@ -4,90 +4,96 @@ import java.util.Random;
 
 public abstract class Marisco {
 
+	// ATRIBUTOS
 	private String imagen;
 	private int fila;
 	private int columna;
 	private String color;
-	private String[] colores = {"rojo", "azul", "amarillo", "verde"};
+	private String[] colores = { "rojo", "azul", "amarillo", "verde" };
 	private ZumaGame game;
 	private Random rnd = new Random();
 
+	// CONSTRUCTORES
 	public Marisco(String imagen, int filas, int columnas, ZumaGame game, String color) {
 		this.imagen = imagen;
 		this.fila = filas;
 		this.columna = columnas;
 		this.game = game;
-		this.color= color; 
+		this.color = color;
 	}
-	
+
 	public Marisco(String imagen, int filas, int columnas, ZumaGame game) {
 		this.imagen = imagen;
 		this.fila = filas;
 		this.columna = columnas;
 		this.game = game;
-		this.color= colores[rnd.nextInt(colores.length)];
+		this.color = colores[rnd.nextInt(colores.length)];
 	}
 
+	// GETTERS Y SETTERS
 	public int getFilas() {
 		return fila;
-	}
-
-	public int getColumnas() {
-		return columna;
-	}
-
-	public String getImagen() {
-		return imagen + "_" + color;
-	}
-	
-	public ZumaGame getGame() {
-		return game;
 	}
 
 	public void setFila(int fila) {
 		this.fila = fila;
 	}
 
+	public int getColumnas() {
+		return columna;
+	}
+
 	public void setColumna(int columna) {
 		this.columna = columna;
 	}
 
+	public String getColor() {
+		return color;
+	}
+
+	public String getImagen() {
+		return imagen + "_" + color;
+	}
+
+	public ZumaGame getGame() {
+		return game;
+	}
+
+	// MOVIMIENTO EN LA MATRIZ
 	public void mover(int[][] mat) {
 		game.borrarMarisco(fila, columna);
-		int dir = mat[fila][columna]; // leer ANTES de cambiar nada
+		int dir = mat[fila][columna];
 		if (dir == 1) {
-			columna++; // derecha
+			columna++;
 		} else if (dir == 2 || dir == 5) {
-			fila++; // abajo
-		} else if (dir == 3) {
-			columna--; // izquierda
-		} else if (dir == 4) {
-			fila--; // arriba
+			fila++;
+		} else if (dir == 3 || dir == 6) {
+			columna--;
+		} else if (dir == 4 || dir == 7) {
+			fila--;
 		}
-		game.dibujarMarisco(fila,columna, getImagen(), this); 
+		game.dibujarMarisco(fila, columna, getImagen(), this);
 	}
-	
+
 	public void retroceder(int[][] mat) {
 		game.borrarMarisco(fila, columna);
 		int dir = mat[fila][columna];
 		if (dir == 1 || dir == 5) {
-			columna--;   // izquierda
+			columna--;
 		} else if (dir == 2 || dir == 6) {
-			fila--;      // arriba
-		} else if (dir==3 || dir==7) {
+			fila--;
+		} else if (dir == 3 || dir == 7) {
 			columna++;
-		} else if (dir==4 || dir==8) {
+		} else if (dir == 4 || dir == 8) {
 			fila++;
 		}
 		game.dibujarMarisco(fila, columna, getImagen(), this);
 	}
 
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Marisco p) {
-			return p.getImagen().equals(imagen);
+			return p.getColor().equals(this.color);
 		} else {
 			return false;
 		}
@@ -95,9 +101,9 @@ public abstract class Marisco {
 
 	@Override
 	public int hashCode() {
-		return imagen.hashCode();
+		return color.hashCode();
 	}
 
-	public abstract void impactar(int fila, int columna)
+	public abstract void impactar(int fila, int columna);
 
 }
