@@ -5,12 +5,14 @@ import java.util.Queue;
 
 public class Pinguino {
 
+	// ATRIBUTOS
 	private int fila = 7;
 	private int col = 10;
 	private String direccion = "ARRIBA";
 	private Queue<String> colores = new LinkedList<>();
 	private ZumaGame game;
-	
+
+	// CONSTRUCTORES
 	public Pinguino(ZumaGame game) {
 		this.game = game;
 		colores.offer("rojo");
@@ -41,12 +43,25 @@ public class Pinguino {
 		colores.offer("azul");
 	}
 
-	public void setDireccion(String nuevaDireccion) {
-		this.direccion = nuevaDireccion;
+	// GETTERS Y SETTERS
+	public int getFila() {
+		return fila;
+	}
+
+	public int getCol() {
+		return col;
 	}
 
 	public String getDireccion() {
 		return direccion;
+	}
+
+	public void setDireccion(String nuevaDireccion) {
+		this.direccion = nuevaDireccion;
+	}
+
+	public String getSiguienteColor() {
+		return colores.peek();
 	}
 
 	public String getCambioDeImagen() {
@@ -63,25 +78,15 @@ public class Pinguino {
 		}
 	}
 
-	public int getFila() {
-		return fila;
-	}
-
-	public int getCol() {
-		return col;
-	}
-	
-	public String getSiguienteColor() {             //
-		return colores.peek();
-	}
-	
+	// MÉTODO
 	public void disparar() {
-		String color = colores.poll();
-		//Crear un PezEstandar con el color
-		//Disparar el PezEstandar <- Game
-		colores.offer(color);
-		game.mostrarColor(8, 8, colores.peek());
-		game.generarPezDisparado(fila, col, color, direccion);
+		String color = colores.peek();
+		boolean disparoConfirmado = game.generarPezDisparado(fila, col, color, direccion);
+		if (disparoConfirmado) {
+			colores.poll();
+			colores.offer(color);
+			game.mostrarColor(8, 8, colores.peek());
+		}
 	}
 
 }
