@@ -2,14 +2,16 @@ package projectZumaGame;
 
 public class Camaron extends Marisco {
 
+	// CONSTRUCTORES
 	public Camaron(int filas, int columnas, ZumaGame game) {
 		super("camaron", filas, columnas, game);
 	}
 
+	// MÉTODO
 	@Override
 	public void impactar(int fila, int columna) {
-		getGame().pausar(fila ,columna);
+		getGame().pausar(fila, columna);
+		getGame().sonido("congelar");
 	}
 
 }
-
